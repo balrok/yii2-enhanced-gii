@@ -46,7 +46,6 @@ class Generator extends BaseGenerator {
     public $useTablePrefix = false;
     public $generateRelations = self::RELATIONS_ALL;
     public $generateAttributeHints = false;
-    public $generateMigrations = false;
     public $optimisticLock = 'lock';
     public $createdAt = 'created_at';
     public $updatedAt = 'updated_at';
@@ -91,7 +90,7 @@ class Generator extends BaseGenerator {
             [['queryBaseClass', 'queryClass'], 'validateClass', 'params' => ['extends' => ActiveQuery::className()]],
             [['db'], 'validateDb'],
             [['enableI18N', 'generateQuery', 'generateLabelsFromComments',
-                'useTablePrefix', 'generateMigrations', 'generateAttributeHints', 'generateBaseOnly'], 'boolean'],
+                'useTablePrefix', 'generateAttributeHints', 'generateBaseOnly'], 'boolean'],
             [['generateRelations'], 'in', 'range' => [self::RELATIONS_NONE, self::RELATIONS_ALL, self::RELATIONS_ALL_INVERSE]],
             [['messageCategory'], 'validateMessageCategory', 'skipOnEmpty' => false],
 
@@ -175,8 +174,6 @@ class Generator extends BaseGenerator {
                 foreign key constraints it detects in the database. Note that if your database contains too many tables,
                 you may want to uncheck this option to accelerate the code generation process.',
             'generateAttributeHints' => 'This indicates whether the generator generate attribute hints on the extended models',
-            'generateMigrations' => 'This indicates whether the generator should generate migrations based on
-                table structure.',
             'optimisticLock' => 'This indicates whether the generator should generate optimistic lock feature for Model. '
                 . 'Enter this field with optimistic lock column name. '
                 . 'Empty this field if you want to disable this feature.',

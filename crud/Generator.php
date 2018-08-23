@@ -36,7 +36,6 @@ class Generator extends \mootensai\enhancedgii\BaseGenerator
     public $generateLabelsFromComments = false;
     public $useTablePrefix = false;
     public $generateRelations = true;
-    public $generateMigrations = true;
     public $optimisticLock = 'lock';
     public $createdAt = 'created_at';
     public $updatedAt = 'updated_at';
@@ -175,8 +174,6 @@ class Generator extends \mootensai\enhancedgii\BaseGenerator
             'generateRelations' => 'This indicates whether the generator should generate relations based on
                 foreign key constraints it detects in the database. Note that if your database contains too many tables,
                 you may want to uncheck this option to accelerate the code generation process.',
-            'generateMigrations' => 'This indicates whether the generator should generate migrations based on
-                table structure.',
             'optimisticLock' => 'This indicates whether the generator should generate optimistic lock feature for Model. '
                 . 'Enter this field with optimistic lock column name. '
                 . 'Empty this field if you want to disable this feature.',
