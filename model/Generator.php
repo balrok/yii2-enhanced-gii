@@ -424,6 +424,9 @@ class Generator extends BaseGenerator {
         $types = [];
         $lengths = [];
         foreach ($table->columns as $column) {
+            if (in_array($column->name, $this->skippedColumns)) {
+                continue;
+            }
             if ($column->autoIncrement) {
                 continue;
             }

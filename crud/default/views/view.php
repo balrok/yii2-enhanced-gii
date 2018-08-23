@@ -88,7 +88,14 @@ if ($tableSchema === false) {
     ]);
 ?>
     </div>
+<?php $relatedTimestamps = []; ?>
 <?php foreach ($relations as $name => $rel): ?>
+<?php
+if (in_array($rel[5], [$generator->deletedBy, $generator->createdBy, $generator->updatedBy])) {
+    $relatedTimestamps[] = $rel[5];
+    continue;
+}
+?>
 <?php if ($rel[2] && isset($rel[3]) && !in_array($name, $generator->skippedRelations)): ?>
     
     <div class="row">
@@ -176,4 +183,42 @@ if($provider<?= $rel[1] ?>->totalCount){
     endif;
 ?>
 <?php endforeach; ?>
+<?php
+    function getRelation($rel) {
+        $rel = explode("_", $rel);
+        return lcfirst(implode("", array_map('ucfirst', $rel)));
+    }
+    if ($generator->createdAt) {
+        echo 'created: <?= $model->' .$generator->createdAt.'?> ';
+        if (in_array($generator->createdBy, $relatedTimestamps)) {
+            echo '<?php if ($model->'.getRelation($generator->createdBy).') echo $model->'.getRelation($generator->createdBy).'->username;';
+            echo 'else echo "&mdash;"?>';
+        } else {
+            echo '<?= $model->' .$generator->createdBy.'?>';
+        }
+        echo "<br/>\n";
+    }
+    if ($generator->updatedAt) {
+        echo 'updated: <?= $model->' .$generator->updatedAt.'?> ';
+        if (in_array($generator->updatedBy, $relatedTimestamps)) {
+            echo '<?php if ($model->'.getRelation($generator->updatedBy).') echo $model->'.getRelation($generator->updatedBy).'->username;';
+            echo 'else echo "&mdash;"?>';
+        } else {
+            echo '<?= $model->' .$generator->updatedBy.'?>';
+        }
+        echo "<br/>\n";
+    }
+    if ($generator->deletedAt) {
+        echo 'deleted: <?= $model->' .$generator->deletedAt.'?> ';
+        if (in_array($generator->deletedBy, $relatedTimestamps)) {
+            echo '<?php if ($model->'.getRelation($generator->deletedBy).') echo $model->'.getRelation($generator->deletedBy).'->username;';
+            echo 'else echo "&mdash;"?>';
+        } else {
+            echo '<?= $model->' .$generator->deletedBy.'?>';
+        }
+        echo "<br/>\n";
+    }
+?>
+
+
 </div>
