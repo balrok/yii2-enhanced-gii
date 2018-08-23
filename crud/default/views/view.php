@@ -133,7 +133,7 @@ if($provider<?= $rel[1] ?>->totalCount){
     </div>
 <?php elseif(empty($rel[2])): ?>
     <div class="row">
-        <h4><?= $rel[1] ?><?= "<?= " ?>' '. Html::encode($this->title) ?></h4>
+        <h4> <?php echo '<?=$model->getAttributeLabel("'.$rel[5].'");?>' ?> <?= $rel[1] ?><?= "<?= " ?>' '. Html::encode($this->title) ?></h4>
     </div>
     <?= "<?php \n" ?>
     $gridColumn<?= $rel[1] ?> = [
@@ -154,13 +154,26 @@ if($provider<?= $rel[1] ?>->totalCount){
             }
         }
     }
-    ?>
+?>
     ];
+
+<?php
+    $column = $tableSchema->columns[$rel[5]];
+    if ($column->allowNull) {
+        echo 'if ($model->'.$name.') {'."\n";
+    }
+    ?>
     echo DetailView::widget([
         'model' => $model-><?= $name ?>,
         'attributes' => $gridColumn<?= $rel[1] ?>
     ]);
-    ?>
-<?php endif; ?>
+<?php
+    if ($column->allowNull) {
+        echo "} else {\n";
+        echo '    echo "&mdash;";'."\n";
+        echo "}\n?>\n";
+    }
+    endif;
+?>
 <?php endforeach; ?>
 </div>
