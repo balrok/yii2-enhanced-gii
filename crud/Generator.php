@@ -543,11 +543,29 @@ class Generator extends \mootensai\enhancedgii\BaseGenerator
             $labelCol = $this->getNameAttributeFK($rel[3]);
 //            $humanize = Inflector::humanize($rel[3]);
 //            $id = 'grid-' . Inflector::camel2id(StringHelper::basename($this->searchModelClass)) . '-' . $attribute;
-//            $modelRel = $rel[2] ? lcfirst(Inflector::pluralize($rel[1])) : lcfirst($rel[1]);
-            $output = "[
-            'attribute' => '$rel[7].$labelCol',
+// $modelRel = $rel[2] ? lcfirst(Inflector::pluralize($rel[1])) : lcfirst($rel[1]);
+			$relName = $rel[5];
+            $relName = str_replace("_id", "", $relName);
+			$relName = explode("_", $relName);
+			$relName = implode("", array_map('ucfirst', $relName));
+			$output = "[
+			'format' => 'html',
+			'value'=>call_user_func(function() use(\$model) {
+\$relation = \$model->get".$relName."();
+if (!\$relation || !\$relation->one()) {
+	return '&mdash;';
+}
+\$relation = \$relation->one();
+\$rc = new ReflectionClass(\$relation);
+if (\$rc->hasMethod('getLinkLabel')) {
+	return \$relation->getLinkLabel();
+} else {
+	return \$relation->getAttribute('".$labelCol."');
+}
+			}),
             'label' => " . $this->generateString(ucwords(Inflector::humanize($rel[5]))) . ",
         ],\n";
+
             return $output;
         } else {
             return "'$attribute" . ($format === 'text' ? "" : ":" . $format) . "',\n";

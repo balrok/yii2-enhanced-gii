@@ -1,4 +1,12 @@
-# yii2-enhanced-gii
+# fork of yii2-enhanced-gii
+
+Improvements over the original:
+
+* split out the runtime-dependencies in a separate package (balrok/yii2-enhanced-gii-dependencies)
+* show [deleted,updated,created]_[at,by] in detailview
+* print a custom label and link for related records if the model implements the `getLinkLabel() : string` method
+
+
 Yii2 Gii (generator) with Relation
 
 [![Latest Stable Version](https://poser.pugx.org/mootensai/yii2-enhanced-gii/v/stable)](https://packagist.org/packages/mootensai/yii2-enhanced-gii)
